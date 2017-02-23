@@ -1,6 +1,7 @@
 FROM library/php:7.1
 
 COPY composer-setup.php /usr/local
+COPY schakel-php-entrypoint /usr/local/bin/
 
 # Install dependancies and
 RUN apt-get update \
