@@ -1,0 +1,24 @@
+#!/bin/sh
+set -e
+
+echo "# server-information"
+
+# Export some version information
+echo +php --version
+php --version
+
+echo +composer --version
+composer --version
+
+echo +phpunit --version
+phpunit --version
+
+echo "# user commands"
+
+# first arg is `-f` or `--some-option`
+if [ "${1#-}" != "$1" ]; then
+	set -- php "$@"
+fi
+
+# Run main command
+exec "$@"
