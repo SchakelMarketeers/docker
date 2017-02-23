@@ -39,21 +39,22 @@ RUN apt-get update \
     && docker-php-ext-enable xdebug
 
 # Install Composer
-RUN php /usr/local/composer-setup.php --quiet --install-dir=/usr/local/bin --filename=composer
-
-# Create composer directory somewhere in /usr/share
-ENV COMPOSER_HOME=/usr/share/composer
+RUN mkdir -p /usr/share/composer/ \
+    && php /usr/local/composer-setup.php \
+        --install-dir=/usr/local/bin \
+        --filename=composer
 
 # Add Composer binaries to path
-ENV PATH=$PATH:/usr/share/composer/bin
+ENV PATH=$PATH:/usr/share/composer/vendor/bin
 
-# Disable interaction globally
+# Disable interaction globally and forcefully set home
 ENV COMPOSER_NO_INTERACTION=1
+ENV COMPOSER_HOME=/usr/share/composer
 
 # Install phpunit and php_codesniffer
-RUN mkdir /usr/share/composer/bin -p \
-    && composer global require  --no-progress --no-suggest \
-        phpunit/phpunit \
-        squizlabs/php_codesniffer
+RUN composer global require \
+    --no-progress --no-suggest \
+    phpunit/phpunit \
+    squizlabs/php_codesniffer
 
 ENTRYPOINT ["schakel-php-entrypoint"]

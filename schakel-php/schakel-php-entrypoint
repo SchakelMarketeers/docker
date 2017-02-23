@@ -1,16 +1,18 @@
 #!/bin/sh
 set -e
 
+echo "WARNING"
+echo "This script is running as non-elevated user"
+
 echo "# server-information"
 
 # Export some version information
-echo +php --version
 php --version
 
-echo +composer --version
-composer --version
+echo " "
+composer --version | grep --invert-match 'Do not run Composer as root/super user'
 
-echo +phpunit --version
+echo " "
 phpunit --version
 
 echo "# user commands"
